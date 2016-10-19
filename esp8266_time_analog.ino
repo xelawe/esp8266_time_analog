@@ -40,6 +40,9 @@ void setup() {
 
   do_status();
 
+  adjust_clock_init();
+
+  /* 
   time_t time_sync = now();
   DebugPrintln("Sync " + String(minute(time_sync)) + " minutes" );
   do_step_min(minute(time_sync));
@@ -51,6 +54,8 @@ void setup() {
   }
 
   time_tick = now();
+*/
+
   do_status();
 
   Alarm.timerRepeat(1,  do_step_sec);
