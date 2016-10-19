@@ -80,6 +80,19 @@ time_t getNtpTime()
   return 0; // return 0 if unable to get the time
 }
 
+void adjust_clock_init(){
+// on first adjust we assume, that the clock is set to the right hour and we just have
+// to adjust minutes an seconds
+time_t sys_time = now();
+
+
+
+
+
+adjust_clock();
+
+}
+
 void adjust_clock() {
   time_t sys_time = now();
   time_t clock_time = time_tick;
