@@ -84,10 +84,14 @@ void adjust_clock_init(){
 // on first adjust we assume, that the clock is set to the right hour and we just have
 // to adjust minutes an seconds
 time_t sys_time = now();
+static tmElements_t tm;
 
+breakTime(sys_time, tm); 
 
+tm.Minute = 0;
+tm.Second = 0;
 
-
+time_tick = makeTime(tm);
 
 adjust_clock();
 
