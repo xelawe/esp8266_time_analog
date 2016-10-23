@@ -23,6 +23,11 @@ void do_status() {
   DebugPrintln(" ");
 }
 
+void tick( ) {
+  adjust_clock( nowl() );
+  do_step_sec();
+}
+
 void setup() {
 #ifdef serdebug
   Serial.begin(115200);
@@ -40,7 +45,7 @@ void setup() {
 
   do_status();
 
-  clock_time_init();
+  clock_time_init(nowl());
 
   do_status();
 
