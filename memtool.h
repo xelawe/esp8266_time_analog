@@ -1,6 +1,8 @@
+#include <Time.h> //http://www.arduino.cc/playground/Code/Time
+#include <TimeLib.h> // https://github.com/PaulStoffregen/Time
+
 // CRC function used to ensure data validity
 uint32_t calculateCRC32(const uint8_t *data, size_t length);
-
 
 // helper function to dump memory contents as hex
 void printMemory();
@@ -15,7 +17,7 @@ struct {
   time_t mem_time;
 } rtcData;
 
-booelan is_mem_valid(){
+boolean is_mem_valid() {
   // Read struct from RTC memory
   if (ESP.rtcUserMemoryRead(0, (uint32_t*) &rtcData, sizeof(rtcData))) {
     DebugPrintln("Read: ");
@@ -35,22 +37,20 @@ booelan is_mem_valid(){
       return true;
     }
   }
-  
 }
-void init_mem(){
-  
+
+void time_to_mem( time_t iv_time ) {
 
   // Generate new data set for the struct
-  //for (int i = 0; i < sizeof(rtcData); i++) {
-  //  rtcData.data[i] = random(0, 128);
-  //}
+  rtcData.mem_time = iv_time;
+
   // Update CRC32 of data
   rtcData.crc32 = calculateCRC32(((uint8_t*) &rtcData) + 4, sizeof(rtcData) - 4);
   // Write struct to RTC memory
   if (ESP.rtcUserMemoryWrite(0, (uint32_t*) &rtcData, sizeof(rtcData))) {
-    Serial.println("Write: ");
+    DebugPrintln("Write: ");
     printMemory();
-    Serial.println();
+    DebugPrintln();
   }
 
   Serial.println("Going into deep sleep for 5 seconds");
@@ -78,16 +78,10 @@ uint32_t calculateCRC32(const uint8_t *data, size_t length)
 }
 
 void printMemory() {
-  char buf[3];
-  for (int i = 0; i < sizeof(rtcData); i++) {
-    sprintf(buf, "%02X", rtcData.data[i]);
-    Serial.print(buf);
-    if ((i + 1) % 32 == 0) {
-      Serial.println();
-    }
-    else {
-      Serial.print(" ");
-    }
-  }
+  time_t mem_time = rtcData.mem_time;
+
+  DebugPrintln();
+  DebugPrintln("Mem   : " + String(hour(mem_time)) + ":" + String(minute(mem_time)) + ":" + String(second(mem_time)) );
+
   Serial.println();
 }

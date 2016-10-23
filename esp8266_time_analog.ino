@@ -36,6 +36,8 @@ void tick( ) {
   }
 
   ClockA.step_sec();
+
+  time_to_mem( ClockA.time() );
 }
 
 void setup() {
@@ -51,8 +53,8 @@ void setup() {
 
   init_time();
 
-  if is_mem_valid() {
-    ClockA.init_time(rtcData.mem_time);
+  if ( is_mem_valid() ){
+    ClockA.set_time(rtcData.mem_time);
   } else {
     ClockA.init_time(nowl());
   }
