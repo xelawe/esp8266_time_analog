@@ -12,14 +12,6 @@
 #include "pulse.h"
 #include "ntptool.h"
 
-
-#define btnpin 4
-#define ledpinbl 13
-#define ledpinrt 15
-#define ledpingn 12
-#define LDRPin (A0)
-int LDRValue;
-
 ClockAnalog ClockA(12, 13, 45);
 
 void do_status() {
@@ -36,10 +28,12 @@ void setup() {
   Serial.begin(115200);
 #endif
 
+  DebugPrintln("__DATE__ __TIME__ __FILE__");
+
 
   pulse_init();
   //ClockA.init();
-  
+
   wifi_init();
 
   ntp_init();
