@@ -40,20 +40,14 @@ int ClockAnalog::adjust_time(time_t iv_time) {
   time_t sys_time = iv_time;
   time_t clock_time = _mv_clock_time;
   time_t diff_time;
-  int diff_sec;
-
-  // time set?
-  //  if ( timeStatus() == timeNotSet ) {
-  //    return;
-  //  }
-
-  // if set, but not synced, we adjust to system time anyway
+  int lv_diff_sec;
 
   // pulses are allowed
   _mv_no_pulse = false;
+  _mv_diff_sec = 0;
 
   if (clock_time == sys_time) {
-    return 0;
+    return _mv_diff_sec;
   }
 
   if (clock_time < sys_time) {
@@ -64,11 +58,9 @@ int ClockAnalog::adjust_time(time_t iv_time) {
     //DebugPrint("Diff : " + String(year(diff_time)) + "." + String(month(diff_time)) + "." + String(day(diff_time)) );
     //DebugPrintln(", " + String(hour(diff_time)) + ":" + String(minute(diff_time)) + ":" + String(second(diff_time)) );
 
-    _mv_diff_sec = second(diff_time);
-
-    _mv_diff_sec = diff_time;
-    if ( _mv_diff_sec > 1) {
-      _mv_diff_sec = diff_sec;
+    lv_diff_sec = diff_time;
+    if ( lv_diff_sec > 1) {
+      _mv_diff_sec = lv_diff_sec;
     }
 
   } else {
@@ -127,7 +119,7 @@ void ClockAnalog::step( ) {
   }
 
   _mv_clock_time++;
-  //  time_tick++;
+  
   //  DebugPrint(".");
 }
 
