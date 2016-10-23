@@ -48,12 +48,12 @@ void time_to_mem( time_t iv_time ) {
   rtcData.crc32 = calculateCRC32(((uint8_t*) &rtcData) + 4, sizeof(rtcData) - 4);
   // Write struct to RTC memory
   if (ESP.rtcUserMemoryWrite(0, (uint32_t*) &rtcData, sizeof(rtcData))) {
-    DebugPrintln("Write: ");
-    printMemory();
-    DebugPrintln();
+    //DebugPrintln("Write: ");
+    //printMemory();
+    //DebugPrintln();
   }
 
-  Serial.println("Going into deep sleep for 5 seconds");
+  //Serial.println("Going into deep sleep for 5 seconds");
   //ESP.deepSleep(5e6);
 }
 
