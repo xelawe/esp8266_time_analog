@@ -21,6 +21,21 @@ void ClockAnalog::init( ) {
   digitalWrite(_mv_PINMOT2, LOW);
 }
 
+void ClockAnalog::init_time( time_t iv_time ){
+
+  // on first adjust we assume, that the clock is set to the right hour and we just have
+  // to adjust minutes an seconds
+  static tmElements_t tm;
+
+  breakTime(iv_time, tm);
+
+  tm.Minute = 0;
+  tm.Second = 0;
+
+  _mv_clock_time = makeTime(tm);
+
+}
+
 void ClockAnalog::step( ) {
   if ( _mv_no_pulse == true ) {
     // no pulses allowed, leave
