@@ -19,6 +19,7 @@ class ClockAnalog
     void step_sec();
     void step_sec(int iv_sec);
     void step_min(int iv_min);
+    time_t time();
 
   private:
     int _mv_PINMOT1 = 12;

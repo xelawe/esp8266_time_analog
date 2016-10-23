@@ -9,7 +9,6 @@
 
 #include "tools_wifiman.h"
 #include "ClockAnalog.h"
-#include "pulse.h"
 #include "ntptool.h"
 
 ClockAnalog ClockA(12, 13, 45);
@@ -19,7 +18,7 @@ void do_status() {
 
   DebugPrintln(" ");
   DebugPrintln("Sys   : " + String(hour(sy_time)) + ":" + String(minute(sy_time)) + ":" + String(second(sy_time)) );
-  DebugPrintln("Clock : " + String(hour(time_tick)) + ":" + String(minute(time_tick)) + ":" + String(second(time_tick)) );
+  //DebugPrintln("Clock : " + String(hour(time_tick)) + ":" + String(minute(time_tick)) + ":" + String(second(time_tick)) );
   DebugPrintln(" ");
 }
 

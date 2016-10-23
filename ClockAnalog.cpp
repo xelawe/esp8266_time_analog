@@ -136,3 +136,9 @@ void ClockAnalog::_pulse( int iv_pin ) {
   delay(_mv_pulsewidth);
   digitalWrite(iv_pin, LOW);
 }
+
+time_t ClockAnalog::time( ) {
+
+  return _mv_clock_time;
+
+}
