@@ -12,7 +12,7 @@
 #include "ntptool.h"
 
 ClockAnalog ClockA(12, 13, 45);
-
+ 
 void do_status() {
   time_t sy_time = nowl();
   time_t clock_time = ClockA.time();
