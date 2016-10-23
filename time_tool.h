@@ -1,6 +1,6 @@
 
 #include <Time.h> //http://www.arduino.cc/playground/Code/Time
-#include <TimeLib.h>
+#include <TimeLib.h> // https://github.com/PaulStoffregen/Time
 #include <TimeAlarms.h>
 #include <Timezone.h>    //https://github.com/JChristensen/Timezone
 
@@ -109,7 +109,7 @@ void check_time() {
   }
 }
 
-void ntp_init() {
+void init_time() {
 
 
   DebugPrintln("Starting UDP");

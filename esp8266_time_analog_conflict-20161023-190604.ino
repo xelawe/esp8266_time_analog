@@ -10,10 +10,10 @@
 #include "memtool.h"
 #include "tools_wifiman.h"
 #include <ClockAnalog.h>
-#include "time_tool.h"
+#include "timetool.h"
 
 ClockAnalog ClockA(12, 13, 45);
-
+ 
 void do_status() {
   time_t sy_time = nowl();
   time_t clock_time = ClockA.time();
@@ -51,11 +51,9 @@ void setup() {
 
   init_time();
 
-  if is_mem_valid() {
-    ClockA.init_time(rtcData.mem_time);
-  } else {
-    ClockA.init_time(nowl());
-  }
+  do_status();
+
+  ClockA.init_time(nowl());
 
   do_status();
 
