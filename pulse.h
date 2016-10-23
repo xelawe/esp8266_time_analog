@@ -72,50 +72,6 @@ void do_step_min(int iv_min) {
 }
 
 
-void adjust_clock(time_t iv_time) {
-  time_t sys_time = iv_time;
-  time_t clock_time = time_tick;
-  time_t diff_time;
-  int diff_sec;
-
-  // time set?
-//  if ( timeStatus() == timeNotSet ) {
-//    return;
-//  }
-
-  // if set, but not synced, we adjust to system time anyway
-
-  if (clock_time == sys_time) {
-    return;
-  }
-
-  if (clock_time < sys_time) {
-    // Clock behind system time
-
-    // pulses are allowed
-    gv_no_pulse = false;
-
-    // calculate difference
-    diff_time = sys_time - clock_time;
-    //DebugPrint("Diff : " + String(year(diff_time)) + "." + String(month(diff_time)) + "." + String(day(diff_time)) );
-    //DebugPrintln(", " + String(hour(diff_time)) + ":" + String(minute(diff_time)) + ":" + String(second(diff_time)) );
-
-    diff_sec = second(diff_time);
-
-    diff_sec = diff_time;
-    if ( diff_sec > 1) {
-      DebugPrintln("Diff " + String(diff_sec) + " seconds" );
-      gv_diff_sec = diff_sec;
-    }
-
-  } else {
-    // Clock in front system time
-    // so we have to wait and don't do any pulses
-    gv_no_pulse = true;
-  }
-
-
-}
 
 
 void clock_time_init(time_t iv_time) {

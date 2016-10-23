@@ -24,8 +24,11 @@ void do_status() {
 }
 
 void tick( ) {
-  adjust_clock( nowl() );
-  do_step_sec();
+  //adjust_clock( nowl() );
+  int diff_sec = ClockA.adjust_time( nowl() );
+  DebugPrintln("Diff " + String(diff_sec) + " seconds" );
+  //do_step_sec();
+  ClockA.step_sec();
 }
 
 void setup() {
@@ -36,8 +39,8 @@ void setup() {
   DebugPrintln("__DATE__ __TIME__ __FILE__");
 
 
-  pulse_init();
-  //ClockA.init();
+  //pulse_init();
+  ClockA.init();
 
   wifi_init();
 
@@ -45,7 +48,8 @@ void setup() {
 
   do_status();
 
-  clock_time_init(nowl());
+  //clock_time_init(nowl());
+  ClockA.init_time(nowl());
 
   do_status();
 
