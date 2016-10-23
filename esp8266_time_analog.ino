@@ -42,10 +42,7 @@ void setup() {
   Serial.begin(115200);
 #endif
 
-  DebugPrintln(" ");
-  DebugPrint(__DATE__);
-  DebugPrint(__TIME__);
-  DebugPrintln(__FILE__);
+  DebugPrintln("\n" + String(__DATE__) + ", " + String(__TIME__) + " " + String(__FILE__));
 
   ClockA.init();
 
