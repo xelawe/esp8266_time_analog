@@ -5,7 +5,10 @@
 #define pulsewidth 45
 
 boolean pulse1 = true;
+boolean gv_no_pulse = false;
+time_t time_tick;
 
+int gv_diff_sec;
 
 void do_pulse( int iv_pin ) {
   digitalWrite(iv_pin, HIGH);
@@ -14,6 +17,12 @@ void do_pulse( int iv_pin ) {
 }
 
 void do_step( ) {
+
+  if ( gv_no_pulse == true ) {
+    // no pulses allowed, leave
+    return;
+  }
+
 
   if ( pulse1 == true ) {
 
@@ -41,8 +50,13 @@ void do_step_sec(int iv_sec) {
 void do_step_sec() {
   int lv_sec;
 
-  lv_sec = 1 + gv_diff_sec;
-  gv_diff_sec = 0;
+  if ( gv_diff_sec > 0 ) {
+    lv_sec = gv_diff_sec;
+    gv_diff_sec = 0;
+  } else {
+    lv_sec = 1;
+  }
+  
   do_step_sec(lv_sec);
 
 }

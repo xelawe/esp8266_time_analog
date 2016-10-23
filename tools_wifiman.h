@@ -45,7 +45,7 @@ void wifi_init( ) {
   }
 
   //if you get here you have connected to the WiFi
-  DebugPrintln("connected...yeey");
+  DebugPrintln("connected to " + WiFi.SSID() + " ...yeey");
 
 }
 

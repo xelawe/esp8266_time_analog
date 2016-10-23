@@ -1,7 +1,8 @@
 
-#include <Time.h>
+#include <Time.h> //http://www.arduino.cc/playground/Code/Time
 #include <TimeLib.h>
 #include <TimeAlarms.h>
+#include <Timezone.h>    //https://github.com/JChristensen/Timezone
 
 #include <WiFiUdp.h>
 
@@ -9,7 +10,8 @@
 /* Don't hardwire the IP address or we won't get the benefits of the pool.
     Lookup the IP address for the host name instead */
 IPAddress timeServerIP; // time.nist.gov NTP server address
-const char* ntpServerName = "time.nist.gov";
+//const char* ntpServerName = "time.nist.gov";
+const char* ntpServerName = "at.pool.ntp.org";
 
 // A UDP instance to let us send and receive packets over UDP
 WiFiUDP Udp;
@@ -18,10 +20,14 @@ const int NTP_PACKET_SIZE = 48; // NTP time is in the first 48 bytes of message
 byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
 
 int SyncInt = 300;
-const int timeZone = 2;     // Central European Time
+const int timeZone = 0;     // UTC
 
-time_t time_tick;
-int gv_diff_sec;
+// Central European Time Zone (Vienna)
+TimeChangeRule myDST = {"CEDT", Last, Sun, Mar, 2, 120};    //Daylight time = UTC - 4 hours
+TimeChangeRule mySTD = {"CET", Last, Sun, Oct, 3,  60};     //Standard time = UTC - 5 hours
+Timezone myTZ(myDST, mySTD);
+
+TimeChangeRule *tcr;        //pointer to the time change rule, use to get TZ abbrev
 
 
 /*-------- NTP code ----------*/
@@ -50,8 +56,12 @@ void sendNTPpacket(IPAddress &address)
 
 time_t getNtpTime()
 {
-  DebugPrintln("Starting UDP");
-  Udp.begin(localPort);
+
+  //get a random server from the pool
+  WiFi.hostByName(ntpServerName, timeServerIP);
+
+  //DebugPrintln("Starting UDP");
+  //Udp.begin(localPort);
   //Serial.print("Local port: ");
   //Serial.println(Udp.localPort());
 
@@ -80,32 +90,23 @@ time_t getNtpTime()
   return 0; // return 0 if unable to get the time
 }
 
-void adjust_clock_init(){
-// on first adjust we assume, that the clock is set to the right hour and we just have
-// to adjust minutes an seconds
-time_t sys_time = now();
-static tmElements_t tm;
 
-breakTime(sys_time, tm); 
-
-tm.Minute = 0;
-tm.Second = 0;
-
-time_tick = makeTime(tm);
-
-adjust_clock();
-
+time_t nowl() {
+  return  myTZ.toLocal(now(), &tcr);
 }
 
 void adjust_clock() {
-  time_t sys_time = now();
+  time_t sys_time = nowl();
   time_t clock_time = time_tick;
   time_t diff_time;
   int diff_sec;
 
-  if ( timeStatus() != timeSet ) {
+  // time set?
+  if ( timeStatus() == timeNotSet ) {
     return;
   }
+
+  // if set, but not synced, we adjust to system time anyway
 
   if (clock_time == sys_time) {
     return;
@@ -113,20 +114,53 @@ void adjust_clock() {
 
   if (clock_time < sys_time) {
     // Clock behind system time
+
+    // pulses are allowed
+    gv_no_pulse = false;
+
     // calculate difference
     diff_time = sys_time - clock_time;
+    //DebugPrint("Diff : " + String(year(diff_time)) + "." + String(month(diff_time)) + "." + String(day(diff_time)) );
+    //DebugPrintln(", " + String(hour(diff_time)) + ":" + String(minute(diff_time)) + ":" + String(second(diff_time)) );
+
+
+
     diff_sec = second(diff_time);
-    if ( diff_sec >= 3) {
-      DebugPrintln("Sync " + String(diff_sec) + " seconds" );
+
+    diff_sec = diff_time;
+    if ( diff_sec > 1) {
+      DebugPrintln("Diff " + String(diff_sec) + " seconds" );
       gv_diff_sec = diff_sec;
     }
 
   } else {
     // Clock in front system time
-
+    // so we have to wait and don't do any pulses
+    gv_no_pulse = true;
   }
+
+
 }
 
+void tick() {
+  adjust_clock();
+  do_step_sec();
+}
+
+void clock_time_init() {
+  // on first adjust we assume, that the clock is set to the right hour and we just have
+  // to adjust minutes an seconds
+  time_t sys_time = nowl();
+  static tmElements_t tm;
+
+  breakTime(sys_time, tm);
+
+  tm.Minute = 0;
+  tm.Second = 0;
+
+  time_tick = makeTime(tm);
+
+}
 
 void check_time() {
   if ( timeStatus() != timeSet ) {
@@ -135,8 +169,8 @@ void check_time() {
       setSyncInterval(SyncInt);
     }
   } else {
-    if (SyncInt != 300) {
-      SyncInt = 300;
+    if (SyncInt != 600) {
+      SyncInt = 600;
       setSyncInterval(SyncInt);
     }
   }
@@ -144,8 +178,9 @@ void check_time() {
 
 void ntp_init() {
 
-  //get a random server from the pool
-  WiFi.hostByName(ntpServerName, timeServerIP);
+
+  DebugPrintln("Starting UDP");
+  Udp.begin(localPort);
 
   setSyncProvider(getNtpTime);
   check_time();
@@ -157,3 +192,4 @@ void ntp_init() {
 
   DebugPrintln("done NTP");
 }
+

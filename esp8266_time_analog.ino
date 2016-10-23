@@ -8,8 +8,10 @@
 #endif
 
 #include "tools_wifiman.h"
-#include "ntptool.h"
+#include "ClockAnalog.h"
 #include "pulse.h"
+#include "ntptool.h"
+
 
 #define btnpin 4
 #define ledpinbl 13
@@ -18,12 +20,14 @@
 #define LDRPin (A0)
 int LDRValue;
 
+ClockAnalog ClockA(12, 13, 45);
+
 void do_status() {
-  time_t sy_time = now();
+  time_t sy_time = nowl();
 
   DebugPrintln(" ");
-  DebugPrintln("Sys  : " + String(hour(sy_time)) + ":" + String(minute(sy_time)) + ":" + String(second(sy_time)) );
-  DebugPrintln("Tick : " + String(hour(time_tick)) + ":" + String(minute(time_tick)) + ":" + String(second(time_tick)) );
+  DebugPrintln("Sys   : " + String(hour(sy_time)) + ":" + String(minute(sy_time)) + ":" + String(second(sy_time)) );
+  DebugPrintln("Clock : " + String(hour(time_tick)) + ":" + String(minute(time_tick)) + ":" + String(second(time_tick)) );
   DebugPrintln(" ");
 }
 
@@ -32,33 +36,22 @@ void setup() {
   Serial.begin(115200);
 #endif
 
-  pulse_init();
 
+  pulse_init();
+  //ClockA.init();
+  
   wifi_init();
 
   ntp_init();
 
   do_status();
 
-  adjust_clock_init();
-
-  /* 
-  time_t time_sync = now();
-  DebugPrintln("Sync " + String(minute(time_sync)) + " minutes" );
-  do_step_min(minute(time_sync));
-
-  time_t time_diff = now() - time_sync;
-  if ( minute(time_diff) >= 1) {
-    DebugPrintln("Sync " + String(minute(time_diff)) + " minutes" );
-    do_step_min(minute(time_diff));
-  }
-
-  time_tick = now();
-*/
+  clock_time_init();
 
   do_status();
 
-  Alarm.timerRepeat(1,  do_step_sec);
+  //Alarm.timerRepeat(1,  do_step_sec);
+  Alarm.timerRepeat(1,  tick);
   Alarm.timerRepeat(60, do_status);
 
 }
@@ -67,7 +60,6 @@ void loop() {
 
   check_time();
 
-  adjust_clock();
-
   Alarm.delay(10);
 }
+
