@@ -8,7 +8,7 @@
 #endif
 
 #include "tools_wifiman.h"
-#include "ClockAnalog.h"
+#include <ClockAnalog.h>
 #include "ntptool.h"
 
 ClockAnalog ClockA(12, 13, 45);
