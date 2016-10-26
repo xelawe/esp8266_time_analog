@@ -49,3 +49,13 @@ void wifi_init( ) {
 
 }
 
+void check_wifi_conn() {
+  while (WiFi.status() != WL_CONNECTED) {
+    DebugPrintln("Wifi not connected -> resetting!");
+    delay(3000);
+    //reset and try again
+    ESP.reset();
+    delay(5000);
+  }
+}
+

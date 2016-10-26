@@ -70,6 +70,8 @@ void loop() {
 
   check_time();
 
+  check_wifi_conn();
+
   Alarm.delay(10);
 }
 
