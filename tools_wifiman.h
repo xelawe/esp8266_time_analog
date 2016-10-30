@@ -35,7 +35,7 @@ void wifi_init( ) {
   wifiManager.setAPCallback(WifimanAPcb);
   //if it does not connect it starts an access point
   //and goes into a blocking loop awaiting configuration
-  if (!wifiManager.autoConnect()) {
+  if (!wifiManager.autoConnect("ESPClockA")) {
     DebugPrintln("failed to connect");
     //Serial.println("failed to connect and hit timeout");
     delay(3000);
