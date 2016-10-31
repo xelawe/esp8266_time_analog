@@ -94,12 +94,6 @@ time_t getNtpTime()
   return 0; // return 0 if unable to get the time
 }
 
-
-time_t nowl() {
-  //return  myTZ.toLocal(now(), &tcr);
-  return  now();
-}
-
 void check_time() {
   if ( timeStatus() != timeSet ) {
     if (SyncInt != 5) {

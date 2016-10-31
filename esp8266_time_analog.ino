@@ -15,7 +15,7 @@
 ClockAnalog ClockA(12, 13, 45);
 
 void do_status() {
-  time_t sy_time = nowl();
+  time_t sy_time = now();
   time_t clock_time = ClockA.time();
 
   DebugPrintln(" ");
@@ -29,7 +29,7 @@ void tick( ) {
   // time set?
   if ( timeStatus() != timeNotSet ) {
     // if set, but not synced, we adjust to system time anyway
-    int diff_sec = ClockA.adjust_time( nowl() );
+    int diff_sec = ClockA.adjust_time( now() );
     if (diff_sec != 0) {
       DebugPrintln("Diff " + String(diff_sec) + " seconds" );
     }
@@ -56,7 +56,7 @@ void setup() {
   if ( is_mem_valid() ){
     ClockA.set_time(rtcData.mem_time);
   } else {
-    ClockA.init_time(nowl());
+    ClockA.init_time(now());
   }
 
   do_status();
