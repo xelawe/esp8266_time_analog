@@ -32,7 +32,7 @@ void wifi_init( ) {
   DebugPrintln("WiFi: wait to connect");
 
   //fetches ssid and pass and tries to connect
-  wifiManager.setAPCallback(WifimanAPcb);
+  // wifiManager.setAPCallback(WifimanAPcb);
   //if it does not connect it starts an access point
   //and goes into a blocking loop awaiting configuration
   if (!wifiManager.autoConnect("ESPClockA")) {
