@@ -11,6 +11,7 @@
 #include "tools_wifiman.h"
 #include <ClockAnalog.h>
 #include "time_tool.h"
+#include "ota_tool.h"
 
 ClockAnalog ClockA(12, 13, 45);
 
@@ -51,6 +52,8 @@ void setup() {
 
   wifi_init();
 
+  init_ota();
+
   init_time();
 
   if ( is_mem_valid() ){
@@ -71,6 +74,8 @@ void loop() {
   check_time();
 
   check_wifi_conn();
+
+  check_ota();
 
   Alarm.delay(10);
 }
