@@ -74,4 +74,3 @@ void loop() {
 
   Alarm.delay(10);
 }
-

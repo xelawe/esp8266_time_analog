@@ -83,7 +83,11 @@ time_t getNtpTime()
       secsSince1900 |= (unsigned long)packetBuffer[41] << 16;
       secsSince1900 |= (unsigned long)packetBuffer[42] << 8;
       secsSince1900 |= (unsigned long)packetBuffer[43];
-      return secsSince1900 - 2208988800UL + timeZone * SECS_PER_HOUR;
+      //return secsSince1900 - 2208988800UL + timeZone * SECS_PER_HOUR;
+      // calculate UTC
+      time_t lv_time_utc = secsSince1900 - 2208988800UL + timeZone * SECS_PER_HOUR;
+      // return CET / CEST
+      return  myTZ.toLocal(lv_time_utc, &tcr);
     }
   }
   DebugPrintln("No NTP Response :-(");
@@ -92,7 +96,8 @@ time_t getNtpTime()
 
 
 time_t nowl() {
-  return  myTZ.toLocal(now(), &tcr);
+  //return  myTZ.toLocal(now(), &tcr);
+  return  now();
 }
 
 void check_time() {
