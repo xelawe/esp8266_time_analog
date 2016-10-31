@@ -36,9 +36,8 @@ void wifi_init( ) {
   //if it does not connect it starts an access point
   //and goes into a blocking loop awaiting configuration
   if (!wifiManager.autoConnect("ESPClockA")) {
-    DebugPrintln("failed to connect");
-    //Serial.println("failed to connect and hit timeout");
-    delay(3000);
+    DebugPrintln("failed to connect and hit timeout");
+    delay(1000);
     //reset and try again, or maybe put it to deep sleep
     ESP.reset();
     delay(5000);
