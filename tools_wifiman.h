@@ -37,12 +37,16 @@ void wifi_init( ) {
   //and goes into a blocking loop awaiting configuration
   if (!wifiManager.autoConnect("ESPClockA")) {
     DebugPrintln("failed to connect and hit timeout");
-    delay(1000);
+    delay(500);
     //reset and try again, or maybe put it to deep sleep
     ESP.reset();
     delay(5000);
   }
 
+  // Force to station mode because if device was switched off while in access point mode it will start up next time in access point mode.
+  // see also https://github.com/tzapu/WiFiManager/issues/229#issuecomment-253360552
+   WiFi.mode(WIFI_STA); 
+ 
   //if you get here you have connected to the WiFi
   DebugPrintln("connected to " + WiFi.SSID() + " ...yeey");
 
@@ -51,7 +55,7 @@ void wifi_init( ) {
 void check_wifi_conn() {
   while (WiFi.status() != WL_CONNECTED) {
     DebugPrintln("Wifi not connected -> resetting!");
-    delay(3000);
+    delay(500);
     //reset and try again
     ESP.reset();
     delay(5000);
