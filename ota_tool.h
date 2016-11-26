@@ -1,8 +1,6 @@
 #include <ArduinoOTA.h>
 
-const char *hostname_ota = "ESPClockA";
-
-void init_ota() {
+void init_ota(char *iv_hostname) {
 
   ArduinoOTA.onStart([]() {
     Serial.println("Start OTA");
@@ -21,7 +19,7 @@ void init_ota() {
     else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
     else if (error == OTA_END_ERROR) Serial.println("End Failed");
   });
-  ArduinoOTA.setHostname(hostname_ota);
+  ArduinoOTA.setHostname(iv_hostname);
   ArduinoOTA.begin();
 
 }

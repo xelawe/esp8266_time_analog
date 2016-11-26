@@ -35,6 +35,10 @@ void tick( ) {
     int diff_sec = ClockA.adjust_time( now() );
     if (diff_sec != 0) {
       DebugPrintln("Diff " + String(diff_sec) + " seconds" );
+      // more than one day?
+      if ( diff_sec > 86400 ) {
+        do_status();
+      }
     }
   }
 
@@ -52,13 +56,13 @@ void setup() {
 
   ClockA.init();
 
-  wifi_init();
+  wifi_init("ESPClockA");
 
-  init_ota();
+  init_ota("ESPClockA");
 
   init_time();
 
-  if ( is_mem_valid() ){
+  if ( is_mem_valid() ) {
     ClockA.set_time(rtcData.mem_time);
   } else {
     ClockA.init_time(now());
