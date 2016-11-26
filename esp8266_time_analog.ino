@@ -20,8 +20,10 @@ void do_status() {
   time_t clock_time = ClockA.time();
 
   DebugPrintln(" ");
-  DebugPrintln("Sys   : " + String(hour(sy_time)) + ":" + String(minute(sy_time)) + ":" + String(second(sy_time)) );
-  DebugPrintln("Clock : " + String(hour(clock_time)) + ":" + String(minute(clock_time)) + ":" + String(second(clock_time)) );
+  DebugPrint("Sys   : " + String(day(sy_time)) + "." + String(month(sy_time)) + "." + String(year(sy_time)) );
+  DebugPrintln(" " + String(hour(sy_time)) + ":" + String(minute(sy_time)) + ":" + String(second(sy_time)) );
+  DebugPrint("Clock : " + String(day(clock_time)) + ":" + String(month(clock_time)) + ":" + String(year(clock_time)) );
+  DebugPrintln(" " + String(hour(clock_time)) + ":" + String(minute(clock_time)) + ":" + String(second(clock_time)) );
   DebugPrintln(" ");
 }
 
